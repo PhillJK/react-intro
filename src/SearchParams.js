@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { ANIMALS } from "@frontendmasters/pet";
+import useDropDown from "./useDropDown";
 
 const SearchParams = () => {
   const [location, setLocation] = useState("Seattle, WA");
-  const [animal, setAnimal] = useState("dog");
+  const [breeds, setBreeds] = useState([]);
+  const [animal, AnimalDropDown] = useDropDown("Animal", "dog", ANIMALS);
+  const [breed, BreedDropDown] = useDropDown("Breed", "", breeds);
 
   return (
     <div className="search-params">
@@ -17,20 +20,8 @@ const SearchParams = () => {
             onChange={(e) => setLocation(e.target.value)}
           />
         </label>
-        <label htmlFor="animal">
-          Animal
-          <select
-            id="animal"
-            value={animal}
-            onChange={(e) => setAnimal(e.target.value)}
-            onBlur={(e) => setAnimal(e.target.value)}
-          >
-            <option>All</option>
-            {ANIMALS.map((animal) => (
-              <option value={animal}>{animal}</option>
-            ))}
-          </select>
-        </label>
+        <AnimalDropDown />
+        <BreedDropDown />
         <button>Submit</button>
       </form>
     </div>
