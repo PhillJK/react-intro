@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from "react";
 import pet, { ANIMALS } from "@frontendmasters/pet";
-import useDropDown from "./useDropDown";
+import Results from "./Results.js";
+import useDropDown from "./useDropDown.js";
 
 const SearchParams = () => {
   const [location, setLocation] = useState("Seattle, WA");
   const [breeds, setBreeds] = useState([]);
   const [animal, AnimalDropDown] = useDropDown("Animal", "dog", ANIMALS);
   const [breed, BreedDropDown, setBreed] = useDropDown("Breed", "", breeds);
+  const [pets, setPets] = useState([]);
+
+  async function requestPets() {
+    const { animals } = await pet.animals({
+      location,
+      breed,
+      type: animal
+    });
+
+    setPets(animals || []);
+  }
 
   useEffect(() => {
     setBreeds([]);
@@ -20,7 +32,12 @@ const SearchParams = () => {
 
   return (
     <div className="search-params">
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          requestPets();
+        }}
+      >
         <label htmlFor="location">
           Location
           <input
@@ -34,6 +51,7 @@ const SearchParams = () => {
         <BreedDropDown />
         <button>Submit</button>
       </form>
+      <Results pets={pets} />
     </div>
   );
 };
