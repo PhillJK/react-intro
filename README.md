@@ -1,2 +1,2 @@
 # react-intro
-React lessons from frontendMasters
+The website to adopt a pet, written with React 
